@@ -3,43 +3,23 @@ from bs4 import BeautifulSoup as bs
 from time import sleep
 import json
 import pandas as pd
-from selenium import webdriver
-import pyautogui as pya
 import datetime
-today = datetime.datetime.now()
-def get_url():
-    while 1:
-        browser=webdriver.Chrome(r"D:\chromedriver-win64\chromedriver-win64\chromedriver.exe")
-        browser.maximize_window()
-        browser.get('https://www.amazon.in/gp/bestsellers/grocery/4859508031')
-        pya.keyDown('ctrl')
-        pya.keyDown('shift')
-        pya.press('j')
-        pya.keyUp('ctrl')
-        pya.keyUp('shift')
-        sleep(2)
-        pya.click(1110,131)
-        sleep(2)
-        pya.click(934,237)
-        pya.keyDown('ctrl')
-        pya.press('l')
-        pya.keyUp('ctrl')
-        sleep(5)
-        browser.execute_script("window.scrollTo(0, 9500)")
-        sleep(2)
-        pya.click(858,392)
-        sleep(2)
-        pya.tripleClick(1248,463)
-        pya.keyDown('ctrl')
-        pya.press('c')
-        pya.keyUp('ctrl')
-        dfurl3=pd.read_clipboard()
-        browser.close()
-        ur=dfurl3.columns[0]
-        if 'nextPage?' in ur:
-            return ur
+from seleniumwire import webdriver
 
-url3= get_url()
+today = datetime.datetime.now()
+
+def get_url2():
+    driver = webdriver.Chrome()
+    driver.get('https://www.amazon.in/gp/bestsellers/grocery/4859508031')
+    sleep(3)
+    driver.execute_script("window.scrollTo(0, 9500)")
+    sleep(3)
+    for request in driver.requests:
+        if 'nextPage?' in request.url:
+            print(request.url)
+            return request.url
+url3= get_url2()
+#%%
 aurl=['https://www.amazon.in/gp/bestsellers/grocery/',
       'https://www.amazon.in/gp/bestsellers/electronics/',
       'https://www.amazon.in/gp/bestsellers/beauty/',
@@ -248,4 +228,4 @@ for i in range(len(eli)):
 df2['Rank']=eli
 df2=df2.drop_duplicates()
 df2 = df2[(df2.Category==ati[0]) | (df2.Category==ati[1])| (df2.Category==ati[2])| (df2.Category==ati[3])| (df2.Category==ati[4])]
-df2.to_csv(fr'D:\Sethu\Amazon Updated\Amazon_Best_Sellers({today.day}.{today.month}.{today.year}).csv',index=False)
+df2.to_csv(fr'Amazon_Best_Sellers({today.day}.{today.month}.{today.year}).csv',index=False)
