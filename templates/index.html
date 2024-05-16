@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<style>
+th,td {
+  padding: 5px;
+}
+</style>
+<body>
+
+<h2>The XMLHttpRequest Object</h2>
+
+<form action=""> 
+	<div id="State">
+  <select name="state" id="state" onchange="getDist(this.value)">
+	<option value="">All</option>
+	<option value="andhra-pradesh">Andhra Pradesh</option>
+	<option value="arunachal-pradesh">Arunachal Pradesh</option>
+	<option value="assam">Assam</option>
+	<option value="bihar">Bihar</option>
+	<option value="chandigarh">Chandigarh</option>
+	<option value="chhattisgarh">Chhattisgarh</option>
+	<option value="delhi">Delhi</option>
+	<option value="goa">Goa</option>
+	<option value="gujarat">Gujarat</option>
+	<option value="haryana">Haryana</option>
+	<option value="himachal-pradesh">Himachal Pradesh</option>
+	<option value="jammu-and-kashmir">Jammu And Kashmir</option>
+	<option value="jharkhand">Jharkhand</option>
+	<option value="karnataka">Karnataka</option>
+	<option value="kerala">Kerala</option>
+	<option value="ladakh">Ladakh</option>
+	<option value="madhya-pradesh">Madhya Pradesh</option>
+	<option value="maharashtra">Maharashtra</option>
+	<option value="manipur">Manipur</option>
+	<option value="meghalaya">Meghalaya</option>
+	<option value="mizoram">Mizoram</option>
+	<option value="nagaland">Nagaland</option>
+	<option value="odisha">Odisha</option>
+	<option value="puducherry">Puducherry</option>
+	<option value="punjab">Punjab</option>
+	<option value="rajasthan">Rajasthan</option>
+	<option value="sikkim">Sikkim</option>
+	<option value="tamil-nadu">Tamil Nadu</option>
+	<option value="telangana">Telangana</option>
+	<option value="tripura">Tripura</option>
+	<option value="uttar-pradesh">Uttar Pradesh</option>
+	<option value="uttarakhand">Uttarakhand</option>
+	<option value="west-bengal">West Bengal</option></select>
+  </select>
+  </div>
+  <div id="District"></div>
+  <div id="Locality"></div>
+  
+</form>
+<br>
+
+
+<script>
+const xhttp = new XMLHttpRequest();
+function getDist(str) {
+  if (str == "") {
+    document.getElementById("District").innerHTML = "";
+    return;
+  }
+  xhttp.onload = function() {
+    document.getElementById("District").innerHTML = this.responseText;
+  }
+  xhttp.open("GET", "api/getDist/"+str);
+  xhttp.send();
+}
+function getLoc(str) {
+  if (str == "") {
+    document.getElementById("Locality").innerHTML = "";
+    return;
+  }
+  xhttp.onload = function() {
+    document.getElementById("Locality").innerHTML = this.responseText;
+  }
+  xhttp.open("GET", "api/GetLoc/"+document.getElementById("state").value+"/"+str);
+  xhttp.send();
+}
+</script>
+</body>
+</html>
