@@ -4,34 +4,8 @@ from time import sleep
 import json
 import pandas as pd
 import datetime
-from seleniumwire import webdriver
 
 today = datetime.datetime.now()
-
-def get_url2():
-    driver = webdriver.Chrome()
-    driver.get('https://www.amazon.in/gp/bestsellers/grocery/4859508031')
-    sleep(3)
-    driver.execute_script("window.scrollTo(0, 9500)")
-    sleep(3)
-    for request in driver.requests:
-        if 'nextPage?' in request.url:
-            print(request.url)
-            return request.url
-url3= get_url2()
-#%%
-aurl=['https://www.amazon.in/gp/bestsellers/grocery/',
-      'https://www.amazon.in/gp/bestsellers/electronics/',
-      'https://www.amazon.in/gp/bestsellers/beauty/',
-      'https://www.amazon.in/gp/bestsellers/hpc/',
-      'https://www.amazon.in/gp/bestsellers/baby/']
-ati=['Grocery & Gourmet Foods',
-     'Electronics',
-     'Beauty',
-     'Health & Personal Care',
-     'Baby Products']
-end=[]
-emli=[]
 h={
 'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
 'accept-encoding': 'gzip, deflate, br',
@@ -88,6 +62,23 @@ h2={
 'x-amz-acp-params': 'tok=n3hM_UljhJbt74Ojmc5jhj0uBA8oUzN64WLyFl7UNLw;ts=1663823454967;rid=4PNE47XK425JGP3GEZM4;d1=160;d2=0',
 'x-requested-with': 'XMLHttpRequest'
                 }
+test_url = 'https://www.amazon.in/gp/bestsellers/grocery/4859508031'
+pg =requests.get(test_url)
+s1 = bs(pg.content,'html.parser')
+url3 = 'https://www.amazon.in'+s1.find('div',{'data-card-metrics-id':'p13n-zg-list-grid-desktop_zeitgeist-lists_2'})['data-acp-path']+'nextPage?page-type=zeitgeist&stamp=1713156676700'
+print(url3)
+aurl=['https://www.amazon.in/gp/bestsellers/grocery/',
+      'https://www.amazon.in/gp/bestsellers/electronics/',
+      'https://www.amazon.in/gp/bestsellers/beauty/',
+      'https://www.amazon.in/gp/bestsellers/hpc/',
+      'https://www.amazon.in/gp/bestsellers/baby/']
+ati=['Grocery & Gourmet Foods',
+     'Electronics',
+     'Beauty',
+     'Health & Personal Care',
+     'Baby Products']
+end=[]
+emli=[]
 
 def check_get(url):
     n=1
@@ -228,4 +219,4 @@ for i in range(len(eli)):
 df2['Rank']=eli
 df2=df2.drop_duplicates()
 df2 = df2[(df2.Category==ati[0]) | (df2.Category==ati[1])| (df2.Category==ati[2])| (df2.Category==ati[3])| (df2.Category==ati[4])]
-df2.to_csv(fr'Amazon_Best_Sellers({today.day}.{today.month}.{today.year}).csv',index=False)
+df2.to_csv(fr'D:\Sethu\Amazon Updated\Amazon_Best_Sellers({today.day}.{today.month}.{today.year}).csv',index=False)
